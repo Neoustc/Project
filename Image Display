@@ -1,0 +1,28 @@
+Brief Description:
+This procedure can implement image read,display write in different formats.besides you can interact with the window,such as use mouse left button to get the pixel’s coordinate and each RGB channels’s value.And you can also press the ‘R’,’G’,’B’ show the single channel like red,green,blue.
+also you can press ‘i’ and ‘o’ to invert or revert the image.and the ‘q’ to quit  from the function.
+
+Implemented:
+1. read image. ———-readPic() function;
+       ImageInput *in = ImageInput::open(FileName);//read image from file;
+       const ImageSpec &spec = in->spec();//access the information of image;
+       xres = spec.width;
+	     yres = spec.height;		
+	     channels = spec.nchannels;
+	     in->read_image(TypeDesc::UINT8,&pixeldata[0]);//get the pixel data;
+    
+2. display image. ——-display() function;
+        glDrawPixels(Width,Height,GL_RGB,GL_UNSIGNED_BYTE,pixeldata);//diaplay gl_RGBA 4channels
+
+3. press key ‘w’ to write image .—-writPic() function;
+        ImageOutput *out = ImageOutput::create(filename);
+        glReadPixels(0,0,Width,Height,GL_RGB,GL_UNSIGNED_BYTE,pixels);//GL_RGBA read pixels from screen;
+        ImageSpec spec (Width, Height, channels, TypeDesc::UINT8);//create the ImageSpec that describes how you will write the output data!
+	      out->open(filename, spec);
+	      out->write_image(TypeDesc::UINT8,pixels);
+	
+4. press key ‘r’,’g’,’b’ to show the different single channel image.—-showR() ,showG().showB() function;
+        glDrawPixels(Width,Height,GL_LUMINANCE,GL_UNSIGNED_BYTE,R);//get the channel information then use GL_LUMINANCE 
+
+6. shortcut keys: q-quit the program, i-invert the image vertically, w-write the image to file, o-show the original image.
+         reverse(pixeldata);//then draw.
